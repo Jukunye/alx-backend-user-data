@@ -34,6 +34,7 @@ class Auth:
         auth_header = request.headers.get('Authorization')
         if auth_header is None:
             return None
+        return auth_header
 
     def current_user(self, request=None) -> User:
         """ Template for all authentication system you will implement.
