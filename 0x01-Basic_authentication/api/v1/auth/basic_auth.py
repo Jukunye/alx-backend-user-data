@@ -2,6 +2,9 @@
 """ This module contains the BasicAuth class"""
 from api.v1.auth.auth import Auth
 from base64 import b64decode
+from typing import TypeVar, Optional
+
+User = TypeVar('User')
 
 
 class BasicAuth(Auth):
@@ -44,3 +47,23 @@ class BasicAuth(Auth):
             return email, password
         except ValueError:
             return None, None
+
+    def user_object_from_credentials(
+            self, user_email: str, user_pwd: str) -> Optional[User]:
+        """Returns the User instance based on the provided email and password
+        """
+
+        if not isinstance(user_email, str) or not isinstance(user_pwd, str):
+            return None
+
+        try:
+            users = User.search({'email': user_email})
+
+            for user in users:
+                if user.is_valid_password(user_pwd):
+                    return user
+
+        except Exception:
+            pass
+
+        return None
