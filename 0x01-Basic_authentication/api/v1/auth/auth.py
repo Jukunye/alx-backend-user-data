@@ -27,9 +27,13 @@ class Auth:
         return True
 
     def authorization_header(self, request=None) -> str:
-        """ Template for all authentication system you will implement.
+        """  Validate all requests to secure the API
         """
-        return None
+        if request is None:
+            return None
+        auth_header = request.headers.get('Authorization')
+        if auth_header is None:
+            return None
 
     def current_user(self, request=None) -> User:
         """ Template for all authentication system you will implement.
