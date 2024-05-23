@@ -5,10 +5,11 @@ from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models.user import User
 from os import getenv
+from typing import Tuple
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def login() -> str:
+def login() -> Tuple[str, int]:
     """ POST /api/v1/users/
     reques body:
       - email
@@ -45,3 +46,15 @@ def login() -> str:
 
     if users is None or users == []:
         return jsonify({"error": "no user found for this email"}), 404
+
+
+@app_views.route('aut_session/logout', methods=['DELETE'],
+                 strict_slashes=False)
+def logout():
+    """Handle user logout"""
+    from api.v1.app import auth
+    destroy = auth.destroy_session(request)
+    if destroy is False:
+        abort(404)
+
+    return jsonify({}), 200
