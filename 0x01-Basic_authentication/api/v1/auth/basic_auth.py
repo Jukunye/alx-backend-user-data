@@ -3,12 +3,14 @@
 from api.v1.auth.auth import Auth
 from base64 import b64decode
 from typing import TypeVar, Optional
+from models.user import User as usr
 
 User = TypeVar('User')
 
 
 class BasicAuth(Auth):
     """ class BasicAuth that inherits from Auth """
+
     def extract_base64_authorization_header(
             self, authorization_header: str) -> str:
         """ returns the Base64 part of the Authorization header
@@ -57,7 +59,7 @@ class BasicAuth(Auth):
             return None
 
         try:
-            users = User.search({'email': user_email})
+            users = usr.search({'email': user_email})
 
             for user in users:
                 if user.is_valid_password(user_pwd):
