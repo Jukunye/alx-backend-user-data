@@ -10,6 +10,7 @@ class Auth:
     """
     A class for handling user authentication and authorization.
     """
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """ Determine whether the given request path requires authentication.
         """
