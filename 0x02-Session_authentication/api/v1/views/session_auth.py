@@ -25,7 +25,7 @@ def login() -> str:
     if password is None or password == "":
         return jsonify({"error": "password missing"}), 400
 
-    user = None
+    users = None
 
     try:
         users = User.search({'email': email})
@@ -43,5 +43,5 @@ def login() -> str:
     except Exception:
         pass
 
-    if user is None:
+    if users is None or users == []:
         return jsonify({"error": "no user found for this email"}), 404
