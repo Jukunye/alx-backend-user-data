@@ -2,8 +2,10 @@
 """ This module contains the Auth class"""
 from flask import request
 from typing import List, TypeVar
+from os import getenv
 
 User = TypeVar('User')
+SESSION_NAME = getenv('SESSION_NAME')
 
 
 class Auth:
@@ -41,3 +43,10 @@ class Auth:
         """ Template for all authentication system you will implement.
         """
         return None
+
+    def session_cookie(self, request=None):
+        """ Returns a cookie value from a request """
+        if request is None:
+            return None
+
+        return request.cookies.get(SESSION_NAME)
