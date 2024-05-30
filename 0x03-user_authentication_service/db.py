@@ -4,6 +4,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import InvalidRequestError, NoResultFound
+from typing import Dict, Any
 
 from user import Base
 from user import User
@@ -45,3 +47,26 @@ class DB:
         self._session.add(new_user)
         self._session.commit()
         return new_user
+
+    def find_user_by(self, **kwargs: Dict[str, Any]) -> User:
+        """
+        Takes in arbitrary keyword arguments
+
+        Returns:
+            the first row found in the users table
+            as filtered by the method’s input arguments.
+        """
+        query = self._session.query(User)
+
+        for key, value in kwargs.items():
+            try:
+                query = query.filter(getattr(User, key) == value)
+            except Exception as e:
+                raise InvalidRequestError
+
+        result = query.first()
+
+        if result is None:
+            raise NoResultFound
+
+        return result
