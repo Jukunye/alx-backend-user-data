@@ -2,6 +2,7 @@
 """
 This module contains _hash_password method
 """
+import uuid
 from sqlalchemy.orm.exc import NoResultFound
 from db import DB
 from user import User
@@ -16,6 +17,13 @@ def _hash_password(password: str) -> bytes:
         salted hash of the input password
     """
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+
+def _generate_uuid():
+    """
+    Generate a Universal Unique Identifier
+    """
+    return str(uuid.uuid4())
 
 
 class Auth:
