@@ -53,20 +53,15 @@ class DB:
         Takes in arbitrary keyword arguments
 
         Returns:
-            the first row found in the users table
-            as filtered by the method’s input arguments.
+            User: first row found in the users table
+            as filtered by the input arguments.
         """
-        query = self._session.query(User)
+        if not kwargs:
+            raise InvalidRequestError
 
-        for key, value in kwargs.items():
-            try:
-                query = query.filter(getattr(User, key) == value)
-            except Exception as e:
-                raise InvalidRequestError
+        user = self._session.query(User).filter_by(**kwargs).first()
 
-        result = query.first()
-
-        if result is None:
+        if user is None:
             raise NoResultFound
 
-        return result
+        return user
