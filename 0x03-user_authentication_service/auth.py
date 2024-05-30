@@ -62,3 +62,16 @@ class Auth:
             pass
 
         return False
+
+    def create_session(self, email: str) -> str:
+        """
+        Creating a new session for a user logging into the system
+        """
+        session_id = _generate_uuid()
+        try:
+            user = self._db.find_user_by(email=email)
+            user.session_id = session_id
+            self._db._session.commit()
+            return session_id
+        except Exception as e:
+            pass
