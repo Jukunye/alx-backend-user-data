@@ -89,3 +89,18 @@ class Auth:
             return None
 
         return user
+
+    def destroy_session(self, user_id: str) -> None:
+        """
+        Logging out a user by destroying their session
+        """
+
+        if user_id is None:
+            return None
+
+        try:
+            user = self._db.find_user_by(user_id=user_id)
+            user.session_id = None
+            self._db._session.commit()
+        except NoResultFound:
+            return None
